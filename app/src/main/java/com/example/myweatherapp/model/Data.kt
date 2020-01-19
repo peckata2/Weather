@@ -1,4 +1,4 @@
-package com.example.myweatherapp.data
+package com.example.myweatherapp.model
 
 data class Data (val time: Long, val summary: String,
                  val precipIntensity : Double, val precipProbability: Float,

@@ -3,21 +3,21 @@ package com.example.myweatherapp
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myweatherapp.data.Data
+import com.example.myweatherapp.model.Data
+import kotlinx.android.synthetic.main.layout_daily_forecast.view.*
 import kotlinx.android.synthetic.main.layout_forecast.view.*
-import java.sql.Time
-import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
-import java.util.*
+import com.example.myweatherapp.MainActivity as MainActivity1
 
 
-class ForecastRecyclerViewAdapter( val hourly_forecasts: List<Data>):
+class ForecastRecyclerViewAdapter( private val hourly_forecasts: List<Data>,var temperature:String):
     RecyclerView.Adapter<ForecastRecyclerViewAdapter.ForecastViewHolder>()
 {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ForecastViewHolder {
             return ForecastViewHolder(
                 LayoutInflater.from(parent.context)
@@ -25,17 +25,19 @@ class ForecastRecyclerViewAdapter( val hourly_forecasts: List<Data>):
             )
     }
 
+
     override fun getItemCount() = hourly_forecasts.size
 
     override fun onBindViewHolder(holder: ForecastViewHolder, position: Int) {
 
         val hourlyForecast = hourly_forecasts[position]
-        val time = DateTimeFormatter.ISO_INSTANT
+        val timeconvert = DateTimeFormatter.ISO_INSTANT
             .format(java.time.Instant.ofEpochSecond(hourlyForecast.time))
-        val time2 = Instant.parse(time).atOffset(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm"))
-        holder.view.timeTextView.text = time2
+        val time = Instant.parse(timeconvert).atOffset(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("E dd-MM HH:mm"))
+
+        holder.view.timeTextView.text = time
         holder.view.summaryTextView.text = hourlyForecast.summary
-        holder.view.temperatureTextView.text = hourlyForecast.temperature.toString()+"\u2103"
+        holder.view.temperatureTextView.text =hourlyForecast.temperature.toString().plus(temperature)
 
     }
 
